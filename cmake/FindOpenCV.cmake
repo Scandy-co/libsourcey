@@ -44,38 +44,61 @@ endif()
 # Find component libraries
 # ----------------------------------------------------------------------
 #set_module_notfound(OPENCV)
+
+if(OPENCV_ROOT_DIR)
+  # message("OPENCV_ROOT_DIR ${OPENCV_ROOT_DIR}")
+  set(OPENCV_LIBRARY_DIRS "${OPENCV_ROOT_DIR}/lib")
+  if(EXISTS ${OPENCV_LIBRARY_DIRS})
+    # message("found OPENCV_LIBRARY_DIRS from OPENCV_ROOT_DIR")
+  else()
+    unset(OPENCV_LIBRARY_DIRS)
+  endif()
+  set(OPENCV_INCLUDE_DIR "${OPENCV_ROOT_DIR}include")
+  if(EXISTS ${OPENCV_INCLUDE_DIR})
+    # message("found OPENCV_INCLUDE_DIR from OPENCV_ROOT_DIR")
+  else()
+    unset(OPENCV_INCLUDE_DIR)
+  endif()
+endif()
+
 if (NOT OPENCV_FOUND)
   set(OPENCV_FOUND 0)
 
   # Find OpenCV include directory
   # set(OPENCV_INCLUDE_DIR OPENCV_INCLUDE_DIR-NOTFOUND)
-  find_path(OPENCV_INCLUDE_DIR
-    NAMES
-      opencv2/core/core.hpp
-    DOC
-      "OpenCV Include Directory"
-    PATHS
-      /usr/local/include
-      /usr/include
-    )
+  if (NOT OPENCV_INCLUDE_DIR)
+    find_path(OPENCV_INCLUDE_DIR
+      NAMES
+        opencv2/core/core.hpp
+      DOC
+        "OpenCV Include Directory"
+      PATHS
+        ${OPENCV_ROOT_DIR}/include
+        /usr/local/include
+        /usr/include
+      )
+  endif()
 
   # Find OpenCV library directory
   # set(OPENCV_LIBRARY_DIRS OPENCV_LIBRARY_DIRS-NOTFOUND)
-  find_path(OPENCV_LIBRARY_DIRS
-    NAMES
-      opencv_core
-    DOC
-      "OpenCV Library Directory"
-    PATHS
-      /usr/lib
-      /usr/lib/x86_64-linux-gnu
-      /usr/lib/i386-linux-gnu
-      /usr/lib64
-      /usr/local/lib
-      /usr/local/lib/x86_64-linux-gnu
-      /usr/local/lib/i386-linux-gnu
-      /usr/local/lib64
-    )
+  if (NOT OPENCV_LIBRARY_DIRS)
+    find_path(OPENCV_LIBRARY_DIRS
+      NAMES
+        opencv_core
+      DOC
+        "OpenCV Library Directory"
+      PATHS
+        ${OPENCV_ROOT_DIR}/lib
+        /usr/lib
+        /usr/lib/x86_64-linux-gnu
+        /usr/lib/i386-linux-gnu
+        /usr/lib64
+        /usr/local/lib
+        /usr/local/lib/x86_64-linux-gnu
+        /usr/local/lib/i386-linux-gnu
+        /usr/local/lib64
+      )
+    endif()
 
   if(OPENCV_LIBRARY_DIRS)
     set(OPENCV_FOUND 1)
