@@ -147,13 +147,22 @@ ssize_t UDPSocket::send(const char* data, size_t len, const Address& peerAddress
     }
 
     auto buf = uv_buf_init((char*)data, (unsigned int)len); // TODO: memcpy data?
-    if (invoke(&uv_udp_send, new uv_udp_send_t, get(), &buf, 1, peerAddress.addr(),
-        [](uv_udp_send_t* req, int) {
-            delete req;
-        })) {
-        return len;
+//    if (invoke(&uv_udp_send, new uv_udp_send_t, get(), &buf, 1, peerAddress.addr(),
+//        [](uv_udp_send_t* req, int) {
+//          free(tmpBuff);
+//            delete req;
+//        })) {
+//        return len;
+//    }
+//    return error().err;
+
+    // Try send catches errors that go unreported and force this socket to be useless after
+    int sentStatus = uv_udp_try_send(get(), &buf, 1, peerAddress.addr());
+    if( sentStatus < 0 ){
+        std::cerr << "error uv_udp_send: " << uv_strerror(sentStatus) << std::endl;
+        return 0;
     }
-    return error().err;
+    return len;
 
     // typedef uv::Request<uv_udp_t, uv_udp_send_t> Request;
     //
