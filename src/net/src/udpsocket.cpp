@@ -159,7 +159,8 @@ ssize_t UDPSocket::send(const char* data, size_t len, const Address& peerAddress
     // Try send catches errors that go unreported and force this socket to be useless after
     int sentStatus = uv_udp_try_send(get(), &buf, 1, peerAddress.addr());
     if( sentStatus < 0 ){
-        setUVError(sentStatus, "Cannot uv_udp_send");
+        LDebug("Send error:", uv_err_name(sentStatus))
+        //setUVError(sentStatus, "Cannot uv_udp_send");
         //std::cerr << "error uv_udp_send: " << uv_strerror(sentStatus) << std::endl;
         return sentStatus;
     }
