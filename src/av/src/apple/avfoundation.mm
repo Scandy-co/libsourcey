@@ -17,6 +17,7 @@ namespace avfoundation {
 
 bool GetAVFoundationVideoDevices(Device::Type type, std::vector<Device>* devices)
 {
+#ifndef TARGET_OS_WATCH
 #if !__has_feature(objc_arc)
   NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
 #else
@@ -52,6 +53,8 @@ bool GetAVFoundationVideoDevices(Device::Type type, std::vector<Device>* devices
   [pool drain];
 #endif
   return true;
+#endif
+  return false;
 }
 
 
