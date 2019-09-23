@@ -236,10 +236,17 @@ else() # Non-Windows
     list(APPEND libuv_SOURCE_FILES
       src/unix/android-ifaddrs.c
       src/unix/pthread-fixes.c
+      src/unix/linux-core.c
+      src/unix/linux-inotify.c
+      src/unix/linux-syscalls.c
+      src/unix/proctitle.c
       src/unix/pthread-barrier.c
     )
     list(APPEND libuv_HEADER_FILES
       include/android-ifaddrs.h
+      include/uv.h
+      include/uv-linux.h
+      include/pthread-barrier.h
       # NOTE: this file doesn't exist
       # include/pthread-fixes.h
     )
