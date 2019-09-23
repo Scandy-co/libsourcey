@@ -240,7 +240,8 @@ else() # Non-Windows
     )
     list(APPEND libuv_HEADER_FILES
       include/android-ifaddrs.h
-      include/pthread-fixes.h
+      # NOTE: this file doesn't exist
+      # include/pthread-fixes.h
     )
   endif()
 endif()
